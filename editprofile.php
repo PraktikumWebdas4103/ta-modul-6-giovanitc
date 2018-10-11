@@ -1,5 +1,19 @@
 <fieldset>
 	<center><h1> Edit Profil </h1>
+		<?php
+	include 'pendaftaran.php';
+	include 'login.php';
+
+	session_start();
+	$uname = $_SESSION['uname'];
+	$pass = $_SESSION['pass'];
+
+	$sql = "SELECT * FROM mahasiswa WHERE username = '$uname' AND pass = '$pass'";
+	$query = mysqli_query($conn, $sql);
+
+	if (mysqli_num_rows($query) > 0) {
+		while ($row = mysqli_fetch_assoc($query)) {
+?>
 	<form action=" " method="POST">
 		<table>
 		<tr>
@@ -63,3 +77,36 @@
 	</center>
 	</form>
 </fieldset>
+<?php
+				}
+			}
+
+			if (isset($_POST['update'])) {
+			$nama = $_POST ['nama'];
+			$nim = $_POST ['nim'];
+			$kelas = $_POST ['kelas'];
+			$jenis = $_POST ['jenis'];
+			$hobi = $_POST ['hobi'];
+			$fakultas = $_POST ['fakultas'];
+			$alamat = $_POST ['alamat'];
+
+				$sql = "UPDATE datamahasiswa
+					SET nama = '$nama',
+					nim = '$nim',
+					kelas = '$kelas',
+					jenis = '$jenis',
+					hobi = '$hobi',
+					fakultas = '$fakultas',
+					alamat = '$alamat'
+					WHERE nim = '$nim'
+				";
+				$query = mysqli_query($conn, $sql);
+
+				$update = '';
+				if ($query) {
+					header("Location: halamanawal.php?update='Data Berhasil Diupdate'");
+				}else{
+					echo 'Data Gagal Diupdate';
+				}
+			}
+		?>
